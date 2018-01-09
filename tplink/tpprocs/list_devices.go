@@ -1,10 +1,9 @@
-package main
+package tpprocs
 
 import (
 	"fmt"
-	"./tplink"
-	"./tplink/tpdevices"
-	"./renderers"
+	"../tpdevices"
+	"../tprender"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 )
@@ -19,7 +18,7 @@ type Devices struct {
 
 func loadDevices(watch_changes bool) (error, *Config) {
 	viper.SetConfigType("toml")
-	viper.SetConfigName("tp-poll")
+	viper.SetConfigName("tpmon")
 	viper.AddConfigPath("/etc/")
 	viper.AddConfigPath(".")
 	if watch_changes {
@@ -46,8 +45,8 @@ func (d *Devices) UpdateDeviceList(devices []string) *Devices {
 	return d
 }
 
-func (d *Devices) GetSystemInfo() (error, []tplink.SystemInfo) {
-	var results []tplink.SystemInfo
+func (d *Devices) GetSystemInfo() (error, []tpdevices.SystemInfo) {
+	var results []tpdevices.SystemInfo
 	for _, device := range d.Devices {
 		_, info := device.GetSystemInfo()
 		results = append(results, info)
@@ -64,7 +63,7 @@ func (d *Devices) GetRealTimeEnergy() (error, []tpdevices.EnergyRealTime) {
 	return nil, results
 }
 
-func main() {
+func CMD_PrintDevices() int {
 	_, config := loadDevices(false)
 
 	devices := Devices{}
@@ -101,5 +100,6 @@ func main() {
 		rows = append(rows, row)
 	}
 
-	renderers.AsciiTable(headers, rows)
+	tprender.AsciiTable(headers, rows)
+	return 0
 }

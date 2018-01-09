@@ -1,4 +1,4 @@
-package renderers
+package tprender
 
 import (
 	"fmt"

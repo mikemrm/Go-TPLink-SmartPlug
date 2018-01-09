@@ -9,14 +9,14 @@ type SmartPlug struct {
 	Address	string
 }
 
-func (d *SmartPlug) GetSystemInfo() (error, tplink.SystemInfo) {
-	data := &tplink.SystemStructure{}
+func (d *SmartPlug) GetSystemInfo() (error, SystemInfo) {
+	data := &SystemStructure{}
 	err, results := tplink.Query(d.Address, data)
 	if err != nil {
-		return err, tplink.SystemInfo{}
+		return err, SystemInfo{}
 	}
 	if err := json.Unmarshal(results, &data); err != nil {
-		return err, tplink.SystemInfo{}
+		return err, SystemInfo{}
 	}
 	return nil, data.System.Info
 }
