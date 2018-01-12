@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 	"fmt"
-	"./tplink/tpprocs"
+	"./tplink/commands"
 )
 
 func PrintHelp() {
@@ -16,15 +16,17 @@ func PrintHelp() {
 
 func main() {
 	if len(os.Args) < 2 {
-		os.Exit(tpprocs.CMD_PrintDevices())
+		os.Exit(tpcmds.PrintDevices())
 	}
 	switch os.Args[1] {
 		case "-l":
-			os.Exit(tpprocs.CMD_PrintDevices())
+			os.Exit(tpcmds.PrintDevices())
 		case "-p":
-			os.Exit(tpprocs.CMD_PollDevices())
+			os.Exit(tpcmds.PollDevices())
 		case "-P":
-			os.Exit(tpprocs.CMD_LoopPollDevices())
+			os.Exit(tpcmds.LoopPollDevices())
+		case "-s":
+			os.Exit(tpcmds.PrintSupportedProducts())
 		default:
 			PrintHelp()
 			os.Exit(1)

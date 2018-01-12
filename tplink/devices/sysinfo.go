@@ -1,5 +1,8 @@
 package tpdevices
 
+import ".."
+import "encoding/json"
+
 type SystemInfo struct {
 	Mode			string	`json:"active_mode,omitempty"`
 	Alias			string	`json:"alias,omitempty"`
@@ -33,18 +36,20 @@ type SystemStructure struct {
 	System	System	`json:"system,omitempty"`
 }
 
-type EnergyRealTime struct {
-	ErrorCode	uint8	`json:"err_code,omitempty"`
-	Power		float32	`json:"power,omitempty"`
-	Voltage		float32	`json:"voltage,omitempty"`
-	Current		float32	`json:"current,omitempty"`
-	TotalKwh	float32	`json:"total,omitempty"`
-}
-
-type Energy struct {
-	RealTime EnergyRealTime `json:"get_realtime"`
-}
-
-type EnergyStructure struct {
-	Energy	Energy	`json:"emeter,omitempty"`
+func (d *TPDevice) getSystemInfo() (error, []string, SystemInfo) {
+	tags := []string{
+		"Mac", "Alias", "Features", "FirmwareId",
+		"GpsLatitude", "OemId", "SoftwareVersion", "Mode", "HardwareVersion",
+		"OnTime", "RelayOn", "ProductType", "Updating", "Model", "HardwareId",
+		"GpsLongitude", "LedOff", "Rssi",
+	}
+	data := &SystemStructure{}
+	err, resp := tplink.Query(d.Addr, data)
+	if err != nil {
+		return err, tags, SystemInfo{}
+	}
+	if err := json.Unmarshal(resp, &data); err != nil {
+		return err, tags, SystemInfo{}
+	}
+	return nil, tags, data.System.Info
 }

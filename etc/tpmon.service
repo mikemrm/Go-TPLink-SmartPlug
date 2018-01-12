@@ -1,0 +1,19 @@
+[Unit]
+Description=TPLink Power Monitor
+After=influxdb.service
+
+[Service]
+User=tpmon
+Group=tpmon
+EnvironmentFile=-/etc/default/tpmon
+ExecStart=/opt/tpmon/bin/tpmon -P
+    --interval "$TPMON_INTERVAL" \
+    --host "$TPMON_INFLUX_HOST" \
+    --database "$TPMON_INFLUX_DB" \
+    --measurement "$TPMON_INFLUX_MEASUREMENT" \
+    --retention "$TPMON_INFLUX_RP" \
+    --precision "$TPMON_INFLUX_PRECISION"
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
