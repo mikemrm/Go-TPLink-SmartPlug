@@ -25,8 +25,6 @@ func main() {
 			os.Exit(tpcmds.PollDevices())
 		case "-P":
 			os.Exit(tpcmds.LoopPollDevices())
-		case "-s":
-			os.Exit(tpcmds.PrintSupportedProducts())
 		default:
 			PrintHelp()
 			os.Exit(1)

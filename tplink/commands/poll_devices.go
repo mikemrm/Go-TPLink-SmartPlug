@@ -10,7 +10,6 @@ import (
 
 
 func PollDevices() int {
-	hosts := []string{"10.7.74.240:9999","10.7.74.241:9999","10.7.74.242:9999","10.7.74.243:9999"}
 
 	influxCmds := flag.NewFlagSet("Loop Polling", flag.ExitOnError)
 
@@ -31,8 +30,20 @@ func PollDevices() int {
 			return 1
 		}
 	}
-	devices := tpdevices.TPDevices{}
-	devices.AddHosts(hosts)
+
+	fmt.Println("Discovering devices...")
+	err, discovered, devices := tpdevices.DiscoverDevices(1)
+	if err != nil {
+		fmt.Println(err)
+		return 1
+	}
+	for _, d := range devices.GetDevices() {
+		fmt.Println("Found", d.Data["Alias"])
+	}
+	if len(discovered) == 0 {
+		fmt.Println("No devices found.")
+		return 1
+	}
 
 	if err := tppoller.RunPoll(devices, *host, *database, *measurement, *precision, *rtpolicy); err != nil {
 		panic(err)
@@ -43,7 +54,6 @@ func PollDevices() int {
 }
 
 func LoopPollDevices() int {
-	hosts := []string{"10.7.74.240:9999","10.7.74.241:9999","10.7.74.242:9999","10.7.74.243:9999"}
 	
 	pollCmds := flag.NewFlagSet("Loop Polling", flag.ExitOnError)
 
@@ -68,8 +78,21 @@ func LoopPollDevices() int {
 			pollCmds.PrintDefaults()
 			return 1
 		}
-		devices := tpdevices.TPDevices{}
-		devices.AddHosts(hosts)
+
+		fmt.Println("Discovering devices...")
+		err, discovered, devices := tpdevices.DiscoverDevices(1)
+		if err != nil {
+			fmt.Println(err)
+			return 1
+		}
+		for _, d := range devices.GetDevices() {
+			fmt.Println("Found", d.Data["Alias"])
+		}
+		if len(discovered) == 0 {
+			fmt.Println("No devices found.")
+			return 1
+		}
+
 		if err := tppoller.StartPolling(devices, uint8(*interval), *host, *database, *measurement, *precision, *rtpolicy); err != nil {
 			panic(err)
 			return 1

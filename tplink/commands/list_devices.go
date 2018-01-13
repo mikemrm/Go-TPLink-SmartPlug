@@ -1,20 +1,26 @@
 package tpcmds
 
 import (
-	"time"
 	"fmt"
 	"../devices"
 	"../outputs"
 )
 
 func PrintDevices() int {
-	s := time.Now()
-	hosts := []string{"10.7.74.240:9999","10.7.74.241:9999","10.7.74.242:9999","10.7.74.243:9999"}
 
-	devices := tpdevices.TPDevices{}
-	for _, host := range hosts {
-		devices.AddHost(host)
+	fmt.Println("Discovering devices...")
+	err, discovered, devices := tpdevices.DiscoverDevices(1)
+	if err != nil {
+		fmt.Println(err)
+		return 1
 	}
+	if len(discovered) > 0 {
+		fmt.Println("Found", len(discovered), "devices!")
+	} else {
+		fmt.Println("No devices found.")
+		return 1
+	}
+
 	err, data := devices.GetAllData()
 	if err != nil {
 		panic(err)
@@ -51,8 +57,5 @@ func PrintDevices() int {
 	}
 
 	tpoutput.AsciiTable(headers, rows)
-	e := time.Now()
-	d := e.Sub(s)
-	fmt.Println(d)
 	return 0
 }

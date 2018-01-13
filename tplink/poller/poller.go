@@ -30,7 +30,6 @@ func RunPoll(devices tpdevices.TPDevices, host string, database string, measurem
 				fields[f] = v
 			}
 		}
-
 		pt, err := client.NewPoint(measurement, tags, fields, time.Now())
 		if err != nil {
 			fmt.Println(err)
