@@ -1,9 +1,11 @@
-# tplink poller
+# TPLink SmartPlug poller
 Another little project to learn golang
 
 # Example Output
 ```shell
-$ go run tp-poll.go
+$ go run tpmon.go
+Discovering devices...
+Found 2 devices!
 +------------------+------------------+-----------+---------+----------+-------+--------+---------+---------+------+-----------+
 | Name             | IP               | Model     | Version | Mode     | State | Watts  | Current | Voltage | PF   | Total Kwh |
 +------------------+------------------+-----------+---------+----------+-------+--------+---------+---------+------+-----------+
