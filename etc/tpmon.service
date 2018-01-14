@@ -6,13 +6,13 @@ After=influxdb.service
 User=tpmon
 Group=tpmon
 EnvironmentFile=-/etc/default/tpmon
-ExecStart=/opt/tpmon/bin/tpmon -P
-    --interval "$TPMON_INTERVAL" \
-    --host "$TPMON_INFLUX_HOST" \
-    --database "$TPMON_INFLUX_DB" \
-    --measurement "$TPMON_INFLUX_MEASUREMENT" \
-    --retention "$TPMON_INFLUX_RP" \
-    --precision "$TPMON_INFLUX_PRECISION"
+ExecStart=/opt/tpmon/bin/tpmon -q influx-loop \
+    --loop.interval "$TPMON_INTERVAL" \
+    --influx.host "$TPMON_INFLUX_HOST" \
+    --influx.database "$TPMON_INFLUX_DB" \
+    --influx.measurement "$TPMON_INFLUX_MEASUREMENT" \
+    --influx.retention "$TPMON_INFLUX_RETENTION" \
+    --influx.precision "$TPMON_INFLUX_PRECISION"
 Restart=on-failure
 
 [Install]

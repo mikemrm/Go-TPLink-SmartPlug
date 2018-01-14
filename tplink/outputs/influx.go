@@ -145,7 +145,7 @@ func (i *InfluxLoop) Write(devices tpdevices.TPDevices) error {
 			if len(points) == 0 {
 				continue
 			}
-			if i.WritePoints(points) != nil {
+			if err = i.WritePoints(points); err != nil {
 				ret_err <- err
 				break
 			}

@@ -1,6 +1,6 @@
 TPMON_INTERVAL=5
 
-TPMON_INFLUX_HOST="localhost:8086"
+TPMON_INFLUX_HOST="http://localhost:8086"
 
 TPMON_INFLUX_DB="tpmon"
 
